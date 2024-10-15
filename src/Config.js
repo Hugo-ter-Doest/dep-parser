@@ -1,6 +1,7 @@
 // Configuration file to steer the extraction, training and testing process from one config
 const DEV = false
 
+// ========================================================================================
 // If you set these three parameters, the rest of the filenames are automatically generated
 const UDTreebankBase = '../ud-treebanks-v2.14/'
 const language = 'English'
@@ -26,7 +27,7 @@ if (DEV) { // Override train and test corpora with dev
 const trainFilePath = UDPath + trainFilename
 const testFilePath =  UDPath + testFilename
 
-const dataDir = './src/data/'
+const dataDir = './data/'
 
 const modelPath = 'file://' + dataDir + baseFilename + 'model/'
 const modelFilePath = modelPath + 'model.json'
