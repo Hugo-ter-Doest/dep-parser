@@ -2,11 +2,11 @@ const Corpus = require('../src/Corpus')
 const fs = require('fs')
 
 // Some constants 
-const corpusFile = './src/data/test_sentences.conllu'
-const anotherFile = './src/data/test_sentences2.conllu'
-formVoca = './data/forms.json'
-lemmaVoca = './data/lemmas.json'
-upostagVoca = './data/upostag.json'
+const corpusFile = '../src/data/test_sentences.conllu'
+const anotherFile = '../src/data/test_sentences2.conllu'
+formVoca = '../data/forms.json'
+lemmaVoca = '../data/lemmas.json'
+upostagVoca = '../data/upostag.json'
 
 describe('Corpus', () => {
     let corpus;
