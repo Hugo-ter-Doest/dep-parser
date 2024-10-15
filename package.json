@@ -1,0 +1,29 @@
+{
+  "name": "dep-parser",
+  "version": "0.0.1",
+  "description": "Dependency parser that can be trained",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./src/test.js",
+    "extract": "node --max-old-space-size=8192 ./src/extract.js",
+    "train": "node --max-old-space-size=8192 ./src/train.js"
+  },
+  "keywords": [
+    "dependency",
+    "parsing",
+    "statistics",
+    "machine learning"
+  ],
+  "author": "Hugo W.L. ter Doest",
+  "license": "EUPL-1.2",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.21.0",
+    "bcrypt": "^5.1.1",
+    "brainjs": "^0.7.4",
+    "conllu": "^0.1.2",
+    "jasmine": "^5.4.0",
+    "natural": "^8.0.1",
+    "node-fetch": "^3.3.2"
+  }
+}

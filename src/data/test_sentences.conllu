@@ -1,0 +1,145 @@
+# I read a book about math
+1	I	_	PRON	_	_	2	subj	_	_
+2	read	_	VERB	_	_	0	root	_	_
+3	a	_	DET	_	_	4	det	_	_
+4	book	_	NOUN	_	_	2	obj	_	_
+5	about	_	ADP	_	_	4	case	_	_
+6	math	_	NOUN	_	_	5	obl	_	_
+
+# Sentence 1
+# Relative Clauses (Crossing Dependencies)
+# The book that John wrote is fascinating
+1	The	the	DET	_	_	2	det	_	_
+2	book	book	NOUN	_	_	7	nsubj	_	_
+3	that	that	PRON	_	_	5	mark	_	_
+4	John	John	PROPN	_	_	5	nsubj	_	_
+5	wrote	write	VERB	_	_	2	acl:relcl	_	_
+6	is	be	AUX	_	_	7	aux	_	_
+7	fascinating	fascinating	ADJ	_	_	0	root	_	_
+
+# Sentence 2
+1	I	I	PRON	_	_	2	nsubj	_	_
+2	gave	give	VERB	_	_	0	root	_	_
+3	the	the	DET	_	_	4	det	_	_
+4	book	book	NOUN	_	_	2	obj	_	_
+5	to	to	ADP	_	_	7	case	_	_
+6	the	the	DET	_	_	7	det	_	_
+7	professor	professor	NOUN	_	_	2	obl	_	_
+8	who	who	PRON	_	_	9	nsubj	_	_
+9	advised	advise	VERB	_	_	7	acl:relcl	_	_
+10	me	I	PRON	_	_	9	obj	_	_
+
+# Sentence 3
+1	The	the	DET	_	_	2	det	_	_
+2	man	man	NOUN	_	_	8	nsubj	_	_
+3	,	,	PUNCT	_	_	6	punct	_	_
+4	whom	who	PRON	_	_	6	obj	_	_
+5	Mary	Mary	PROPN	_	_	6	nsubj	_	_
+6	saw	see	VERB	_	_	2	acl:relcl	_	_
+7	,	,	PUNCT	_	_	6	punct	_	_
+8	greeted	greet	VERB	_	_	0	root	_	_
+9	her	she	PRON	_	_	8	obj	_	_
+
+# Sentence 4
+1	I	I	PRON	_	_	2	nsubj	_	_
+2	don't	do	AUX	_	_	3	aux	_	_
+3	know	know	VERB	_	_	0	root	_	_
+4	which	which	DET	_	_	5	det	_	_
+5	book	book	NOUN	_	_	8	obj	_	_
+6	the	the	DET	_	_	7	det	_	_
+7	professor	professor	NOUN	_	_	8	nsubj	_	_
+8	recommended	recommend	VERB	_	_	3	ccomp	_	_
+
+# Sentence 5
+1	The	the	DET	_	_	2	det	_	_
+2	car	car	NOUN	_	_	9	nsubj	_	_
+3	that	that	PRON	_	_	5	mark	_	_
+4	I	I	PRON	_	_	5	nsubj	_	_
+5	bought	buy	VERB	_	_	2	acl:relcl	_	_
+6	last	last	ADJ	_	_	7	amod	_	_
+7	week	week	NOUN	_	_	5	obl:tmod	_	_
+8	was	be	AUX	_	_	9	aux	_	_
+9	expensive	expensive	ADJ	_	_	0	root	_	_
+
+# Sentence 6
+# Long-Distance Dependencies (Discontinuous Constituents)
+# This is the book I was talking about yesterday
+1	This	this	PRON	_	_	4	nsubj	_	_
+2	is	be	AUX	_	_	4	cop	_	_
+3	the	the	DET	_	_	4	det	_	_
+4	book	book	NOUN	_	_	0	root	_	_
+5	I	I	PRON	_	_	7	nsubj	_	_
+6	was	be	AUX	_	_	7	aux	_	_
+7	talking	talk	VERB	_	_	4	acl:relcl	_	_
+8	about	about	ADP	_	_	7	obl	_	_
+9	yesterday	yesterday	NOUN	_	_	7	obl:tmod	_	_
+
+# Sentence 7
+# Scrambling (Free Word Order)
+# Dem Mann gab Maria das Buch. (Lit: To the man gave Maria the book.)
+1	Dem	der	DET	_	_	2	det	_	_
+2	Mann	Mann	NOUN	_	_	3	obl	_	_
+3	gab	geben	VERB	_	_	0	root	_	_
+4	Maria	Maria	PROPN	_	_	3	iobj	_	_
+5	das	das	DET	_	_	6	det	_	_
+6	Buch	Buch	NOUN	_	_	3	obj	_	_
+
+# Sentence 8 
+# Extraposition (Postposing)
+# The report was submitted by John yesterday
+1	The	the	DET	_	_	2	det	_	_
+2	report	report	NOUN	_	_	4	nsubj:pass	_	_
+3	was	be	AUX	_	_	4	aux:pass	_	_
+4	submitted	submit	VERB	_	_	0	root	_	_
+5	by	by	ADP	_	_	6	case	_	_
+6	John	John	PROPN	_	_	4	obl	_	_
+7	yesterday	yesterday	NOUN	_	_	4	obl:tmod	_	_
+
+# Sentence 9
+# Raising and Control Constructions
+# John seems to know the answer
+1	Books	book	NOUN	_	_	5	obj	_	_
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	I	I	PRON	_	_	5	nsubj	_	_
+4	will	will	AUX	_	_	5	aux	_	_
+5	read	read	VERB	_	_	0	root	_	_
+6	tomorrow	tomorrow	NOUN	_	_	5	obl:tmod	_	_
+
+# Sentence 10
+# Wh-Movement (Interrogative Clauses)
+# Which book did you say John liked?
+1	Which	which	DET	_	_	2	det	_	_
+2	book	book	NOUN	_	_	6	obj	_	_
+3	did	do	AUX	_	_	5	aux	_	_
+4	you	you	PRON	_	_	5	nsubj	_	_
+5	say	say	VERB	_	_	6	ccomp	_	_
+6	John	John	PROPN	_	_	7	nsubj	_	_
+7	liked	like	VERB	_	_	0	root	_	_
+
+# Sentence 11
+# Parataxis (Coordination of Clauses)
+# John went to the store, and he bought some apples
+1	John	John	PROPN	_	_	2	nsubj	_	_
+2	went	go	VERB	_	_	0	root	_	_
+3	to	to	ADP	_	_	5	case	_	_
+4	the	the	DET	_	_	5	det	_	_
+5	store	store	NOUN	_	_	2	obl	_	_
+6	,	,	PUNCT	_	_	2	punct	_	_
+7	and	and	CCONJ	_	_	2	cc	_	_
+8	he	he	PRON	_	_	9	nsubj	_	_
+9	bought	buy	VERB	_	_	2	conj	_	_
+10	some	some	DET	_	_	11	det	_	_
+11	apples	apple	NOUN	_	_	9	obj	_	_
+
+# Sentence 12
+# The book that John said Mary recommended, I borrowed.
+1	The	the	DET	_	_	2	det	_	_
+2	book	book	NOUN	_	_	9	obj	_	_
+3	that	that	PRON	_	_	6	nsubj	_	_
+4	John	John	PROPN	_	_	6	nsubj	_	_
+5	said	say	VERB	_	_	6	ccomp	_	_
+6	recommended	recommend	VERB	_	_	2	acl:relcl	_	_
+7	Mary	Mary	PROPN	_	_	6	nsubj	_	_
+8	,	,	PUNCT	_	_	9	punct	_	_
+9	I	I	PRON	_	_	10	nsubj	_	_
+10	borrowed	borrow	VERB	_	_	0	root	_	_
