@@ -1,4 +1,4 @@
-const Corpus = require('../Corpus')
+const Corpus = require('../src/Corpus')
 const fs = require('fs')
 
 // Some constants 
