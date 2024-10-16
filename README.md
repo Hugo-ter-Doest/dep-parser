@@ -38,11 +38,13 @@ return arcs
 The ML component is in the getBestAction function that uses the pretrained model to predict the best action.
 
 # Feature extraction
-The feature extraction is done with the `extractFeatures` function.
+The feature extraction is done with the `extractFeatures` function. Currently it extracts the form and upostag of the tokens in the stack and buffer. Both are extracted two deep. The word forms are normalized (values between 0 and 1) and the POS tags are one-hot encoded.
 
 
 # Dependencies
-- [tensorflow/tfjs-node](https://www.npmjs.com/package/@tensorflow/tfjs-node)
+- [tensorflow/tfjs-node](https://www.npmjs.com/package/@tensorflow/tfjs-node) for the neural network
+- [Jasmine](https://www.npmjs.com/package/jasmine) for testing with Jasmine
+
 
 # License
 This package is licensed under the [EUPL-1.2](https://spdx.org/licenses/EUPL-1.2.html) license.
