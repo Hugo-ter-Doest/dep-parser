@@ -1,9 +1,7 @@
-const fs = require('fs')
-const Corpus = require('./Corpus')
-const FeatureExtractor = require('./FeatureExtractor')
-const PatternSet = require('./PatternSet')
-
-const config = require('./Config');
+import Corpus from './Corpus.js';
+import FeatureExtractor from './FeatureExtractor.js';
+import PatternSet from './PatternSet.js';
+import config from './Config.js';
 
 // Extract training patterns
 const corpus = new Corpus()

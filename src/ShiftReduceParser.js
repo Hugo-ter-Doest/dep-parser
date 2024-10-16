@@ -1,9 +1,8 @@
-const tf = require('@tensorflow/tfjs-node')
-
-const { extractFeatures,
+import tf from '@tensorflow/tfjs-node'
+import { extractFeatures,
   actionVocab,
   logState
-} = require('./ConlluUtil')
+} from './ConlluUtil.js'
 
 const DEBUG = true
 
@@ -150,4 +149,4 @@ class ShiftReduceParser {
   }
 }
 
-module.exports = ShiftReduceParser
+export default ShiftReduceParser

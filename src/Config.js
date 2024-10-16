@@ -27,7 +27,10 @@ if (DEV) { // Override train and test corpora with dev
 const trainFilePath = UDPath + trainFilename
 const testFilePath =  UDPath + testFilename
 
-const dataDir = './data/'
+// ========================================================================================
+// This directory is used for all output of the extract, train and test processes
+const dataDir = './data/output/'
+// ========================================================================================
 
 const modelPath = 'file://' + dataDir + baseFilename + 'model/'
 const modelFilePath = modelPath + 'model.json'
@@ -53,7 +56,7 @@ const testResultsFilePath = dataDir + testResultsfile
 const trainResultsfile = baseFilename + 'trainResults.json'
 const trainResultsFilePath = dataDir + trainResultsfile
 
-module.exports = {
+export default {
   corpusTrain: trainFilePath,
   corpusTest: testFilePath,
   failedSentencesFile: failedSentencesFilePath,

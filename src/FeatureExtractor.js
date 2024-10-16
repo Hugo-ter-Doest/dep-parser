@@ -1,7 +1,6 @@
-const fs = require('fs')
-const ConlluUtil = require('./ConlluUtil')
-const Corpus = require('./Corpus')
-const config = require('./Config')
+import * as ConlluUtil from './ConlluUtil.js'
+import config from './Config.js'
+
 const DEBUG = false
 
 class FeatureExtractor {
@@ -197,5 +196,4 @@ class FeatureExtractor {
 
 }
 
-
-module.exports = FeatureExtractor
+export default FeatureExtractor

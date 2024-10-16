@@ -1,5 +1,6 @@
-const fs = require('fs')
-const ConlluUtil = require('./ConlluUtil')
+import fs from 'fs'
+import ConlluUtil from './ConlluUtil'
+
 const corpusFile = './test_data/test_sentences.conllu'
 //const corpusFile = '../../ud-treebanks-v2.14/UD_English-GUM/' + 'en_gum-ud-dev.conllu'
 

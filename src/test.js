@@ -1,10 +1,9 @@
-const fs = require('fs')
-const tf = require('@tensorflow/tfjs-node')
-const ConlluUtil = require('./ConlluUtil')
-const Corpus = require('./Corpus')
-const ShiftReduceParser = require('./ShiftReduceParser')
-
-const config = require('./Config')
+import fs from 'fs';
+import * as tf from '@tensorflow/tfjs-node';
+import { succesfullyProcessed, recallPrecision } from './ConlluUtil.js';
+import Corpus from './Corpus.js';
+import ShiftReduceParser from './ShiftReduceParser.js';
+import config from './Config.js';
 
 // Load the model
 tf.loadLayersModel(config.modelFile)
@@ -31,10 +30,10 @@ function test (classifier) {
   // Parse the test sentence
   corpus.getSentences().forEach(s => {
     const { stack, buffer, arcs } = parser.parse(s)
-    if (ConlluUtil.succesfullyProcessed(stack, buffer)) {
+    if (succesfullyProcessed(stack, buffer)) {
       nrSuccess++
     }
-    const result = ConlluUtil.recallPrecision(s, arcs)
+    const result = recallPrecision(s, arcs)
     if (result) {
       recallSum += result.recall
       precisionSum += result.precision

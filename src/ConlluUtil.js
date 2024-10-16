@@ -1,6 +1,6 @@
 // Function to parse a CoNLL-U file and return sentences as arrays of token objects
-const fs = require('fs')
-const crypto = require('crypto');
+import fs from 'fs';
+import crypto from 'crypto';
 const DEBUG = false
 
 // Vocabularies for encoding
@@ -37,6 +37,14 @@ function printDependencyTree(parsedSentence) {
     printTree(root.id);
 }
 
+/**
+ * Checks whether the parser has succesfully processed the sentence.
+ * A parse is considered succesful if the stack contains only one element (the root),
+ * the buffer is empty and the root has no head.
+ * @param {Array} stack - The stack of tokens.
+ * @param {Array} buffer - The buffer of tokens.
+ * @returns {boolean} True if the parse was succesful, false otherwise.
+ */
 function succesfullyProcessed(stack, buffer) {
     return ((stack.length === 1) && // Only one element is the root
     (buffer.length === 0) && // Buffer is fully processed
@@ -199,7 +207,7 @@ function encodeAction (action) {
   return oneHotEncode(action, actionVocab);
 }
 
-module.exports = { 
+export {
   printDependencyTree,
   succesfullyProcessed, 
   hasNonProjectiveStructure,
@@ -208,5 +216,5 @@ module.exports = {
   extractFeatures,
   encodeAction,
   actionVocab,
-  recallPrecision,
+  recallPrecision
 }

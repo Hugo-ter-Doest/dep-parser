@@ -2,8 +2,11 @@
   "name": "dep-parser",
   "version": "0.0.1",
   "description": "Dependency parser that can be trained",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    "./*": "./*.js"
+  },
   "scripts": {
     "test": "node ./src/test.js",
     "extract": "node --max-old-space-size=8192 ./src/extract.js",
@@ -23,7 +26,6 @@
     "brainjs": "^0.7.4",
     "conllu": "^0.1.2",
     "jasmine": "^5.4.0",
-    "natural": "^8.0.1",
     "node-fetch": "^3.3.2"
   }
 }

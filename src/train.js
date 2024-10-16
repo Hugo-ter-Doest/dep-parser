@@ -1,8 +1,7 @@
-const fs = require('fs')
-const tf = require('@tensorflow/tfjs-node');  // Import TensorFlow.js for Node.js
-const PatternSet = require('./PatternSet')
-
-const config = require('./Config')
+import fs from 'fs';
+import * as tf from '@tensorflow/tfjs-node';  // Import TensorFlow.js for Node.js
+import PatternSet from './PatternSet.js';
+import config from './Config.js';
 
 const patterns = new PatternSet()
 patterns.load(config.patternsFile, (patterns) => {

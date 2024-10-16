@@ -1,4 +1,4 @@
-const fs = require('fs')
+import fs from 'fs'
 
 class PatternSet {
   constructor (patterns) {
@@ -86,4 +86,4 @@ class PatternSet {
 
 }
 
-module.exports = PatternSet
+export default PatternSet

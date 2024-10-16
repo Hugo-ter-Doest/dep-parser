@@ -1,6 +1,6 @@
 
-const fs = require('fs')
-const config = require('./Config')
+import fs from 'fs';
+import config from './Config.js';
 
 const DEBUG = true
 
@@ -172,4 +172,4 @@ class Corpus {
   }
 }
 
-module.exports = Corpus
+export default Corpus
