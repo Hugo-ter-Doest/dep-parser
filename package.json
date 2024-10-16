@@ -22,10 +22,6 @@
   "license": "EUPL-1.2",
   "dependencies": {
     "@tensorflow/tfjs-node": "^4.21.0",
-    "bcrypt": "^5.1.1",
-    "brainjs": "^0.7.4",
-    "conllu": "^0.1.2",
-    "jasmine": "^5.4.0",
-    "node-fetch": "^3.3.2"
+    "jasmine": "^5.4.0"
   }
 }
