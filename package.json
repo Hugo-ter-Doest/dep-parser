@@ -4,9 +4,6 @@
   "description": "Dependency parser that can be trained",
   "type": "module",
   "main": "index.js",
-  "exports": {
-    "./*": "./*.js"
-  },
   "scripts": {
     "test": "node ./src/test.js",
     "extract": "node --max-old-space-size=8192 ./src/extract.js",

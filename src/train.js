@@ -3,11 +3,13 @@ import * as tf from '@tensorflow/tfjs-node';  // Import TensorFlow.js for Node.j
 import PatternSet from './PatternSet.js';
 import config from './Config.js';
 
-const patterns = new PatternSet()
-patterns.load(config.patternsFile, (patterns) => {
-  console.log('Patterns loaded from ' + config.patternsFile)
-  trainTensorFlow(patterns)
-})
+export default () => {
+  const patterns = new PatternSet()
+  patterns.load(config.patternsFile, (patterns) => {
+    console.log('Patterns loaded from ' + config.patternsFile)
+    trainTensorFlow(patterns)
+  })
+}
 
 function trainTensorFlow (patterns) {
   const X = patterns.map(pattern => pattern.input)

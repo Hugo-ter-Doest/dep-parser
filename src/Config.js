@@ -57,40 +57,40 @@ const trainResultsfile = baseFilename + 'trainResults.json'
 const trainResultsFilePath = dataDir + trainResultsfile
 
 export default {
-  corpusTrain: trainFilePath,
-  corpusTest: testFilePath,
-  failedSentencesFile: failedSentencesFilePath,
-  formFile: formFilePath,
-  lemmaFile: lemmaFilePath,
-  upostagFile: upostagFilePath,
-  patternsFile: patternsFilePath,
+  corpusTrain: process.env.CORPUS_TRAIN || trainFilePath,
+  corpusTest: process.env.CORPUS_TEST || testFilePath,
+  failedSentencesFile: process.env.FAILED_SENTENCES_FILE || failedSentencesFilePath,
+  formFile: process.env.FORM_FILE || formFilePath,
+  lemmaFile: process.env.LEMMA_FILE || lemmaFilePath,
+  upostagFile: process.env.UPOSTAG_FILE || upostagFilePath,
+  patternsFile: process.env.PATTERNS_FILE || patternsFilePath,
   // Use modelDir when saving
-  modelDir: modelPath,
+  modelDir: process.env.MODEL_DIR || modelPath,
   // Use modelFile when loading
-  modelFile: modelFilePath,
-  testResultsFile: testResultsFilePath,
-  trainResultsFile: trainResultsFilePath,
+  modelFile: process.env.MODEL_FILE || modelFilePath,
+  testResultsFile: process.env.TEST_RESULTS_FILE || testResultsFilePath,
+  trainResultsFile: process.env.TRAIN_RESULTS_FILE || trainResultsFilePath,
 
   // Parameters for training TensorFlow
   TensorFlow: {
     layers: [
       {
-        units: 128,
-        activation: 'relu' 
+        units: parseInt(process.env.TENSORFLOW_INPUTLAYER_UNITS, 10) || 128,
+        activation: process.env.TENSORFLOW_INPUTLAYER_ACTIVATION || 'relu' 
       }, 
       {
-        units: 64,
-        activation: 'relu'
+        units: parseInt(process.env.TENSORFLOW_HIDDENLAYER_UNITS, 10) || 64,
+        activation: process.env.TENSORFLOW_HIDDENLAYER_ACTIVATION || 'relu'
       },
       {
-        units: 4,
-        activation: 'softmax'
+        units: parseInt(process.env.TENSORFLOW_OUTPUTLAYER_UNITS, 10) || 4,
+        activation: process.env.TENSORFLOW_OUPUTLAYER_ACTIVATION || 'softmax'
       }
     ],
-    optimizer: 'adam',
-    loss: 'categoricalCrossentropy',
-    metrics: ['accuracy'],
-    batchSize: 2000,
-    epochs: 30
+    optimizer: process.env.TENSORFLOW_OPTIMIZER || 'adam',
+    loss: process.env.TENSORFLOW_LOSS || 'categoricalCrossentropy',
+    metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
+    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 2000,
+    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 30
   }
 }

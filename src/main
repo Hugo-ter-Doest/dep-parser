@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+import extract from './extract.js'
+import train from './train.js'
+import test from './test.js'
+
+const commands = {
+  extract: extract,
+  train: train,
+  test: test,
+}
+
+const usage = () => {
+  console.log('Usage: node index.js <command> [<command> ...]')
+  console.log('Commands:')
+  console.log('  extract  Extract training patterns')
+  console.log('  train    Train the model')
+  console.log('  test     Test the model\n')
+
+  console.log('Environment variables for files and directoris:')
+  console.log('  MODEL_FILE: Path to the model file')
+  console.log('  CORPUS_TRAIN: Path to the training corpus')
+  console.log('  CORPUS_TEST: Path to the test corpus')
+  console.log('  FORM_FILE: Path to the form vocabulary file')
+  console.log('  LEMMA_FILE: Path to the lemma vocabulary file')
+  console.log('  UPOSTAG_FILE: Path to the upostag vocabulary file')
+  console.log('  PATTERNS_FILE: Path to the pattern file')
+  console.log('  MODEL_DIR: Path to the model directory')
+  console.log('  MODEL_FILE: Path to the model directory')
+  console.log('  TEST_RESULTS_FILE: Path to the test results')
+  console.log('  TRAIN_RESULTS_FILE: Path to the model directory\n')
+
+  console.log('TensorFlow variables:')
+  console.log('  TENSORFLOW_INPUTLAYER_UNITS: number of units for the input layer')
+  console.log('  TENSORFLOW_INPUTLAYER_ACTIVATION: activation function for the input layer')
+  console.log('  TENSORFLOW_HIDDEN_LAYER_UNITS: number of units for the hidden layer')
+  console.log('  TENSORFLOW_HIDDEN_LAYER_ACTIVATION: activation function for the hidden layer')
+  console.log('  TENSORFLOW_OUTPUT_LAYER_UNITS: number of units for the output layer')
+  console.log('  TENSORFLOW_OUTPUT_LAYER_ACTIVATION: activation function for the output layer')
+  console.log('  TENSORFLOW_OPTIMIZER: optimizer for the model')
+  console.log('  TENSORFLOW_LOSS: loss function for the model')
+  console.log('  TENSORFLOW_METRICS: metrics for the model')
+  console.log('  TENSORFLOW_BATCH_SIZE: batch size for training')
+  console.log('  TENSORFLOW_EPOCHS: number of epochs for training')
+}
+
+const args = process.argv.slice(2)
+
+if (args.length === 0) {
+  usage()
+  process.exit(1)
+}
+
+args.forEach((arg) => {
+  if (!commands[arg]) {
+    console.error(`Unknown command: ${arg}`)
+    usage()
+    process.exit(1)
+  }
+})
+
+args.forEach((arg) => {
+  const cmd = commands[arg]
+  cmd()
+})

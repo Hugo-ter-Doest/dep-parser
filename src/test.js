@@ -5,15 +5,17 @@ import Corpus from './Corpus.js';
 import ShiftReduceParser from './ShiftReduceParser.js';
 import config from './Config.js';
 
-// Load the model
-tf.loadLayersModel(config.modelFile)
-  .then(model => {
-    console.log('Model loaded!');
-    test(model)
-  })
-  .catch(err => {
-    console.error(err)
-  })
+export default () => {
+  // Load the model
+  tf.loadLayersModel(config.modelFile)
+    .then(model => {
+      console.log('Model loaded!');
+      test(model)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
 
 function test (classifier) {
   // Test the model on a new sentence
