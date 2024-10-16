@@ -1,5 +1,4 @@
 // Function to parse a CoNLL-U file and return sentences as arrays of token objects
-import fs from 'fs';
 import crypto from 'crypto';
 const DEBUG = false
 

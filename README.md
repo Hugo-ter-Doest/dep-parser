@@ -16,9 +16,20 @@ npm run train
 npm run test
 ```
 
+# Conllu Format
+The package parses Universal Dependencies Conllu format. The Corpus class is used to load and save corpora in CoNLL-U format.
+```javascript
+import Corpus from './Corpus.js';
+import config from './Config.js';
+
+const corpus = new Corpus()
+// Second parameter tells the class to build vocabularies from the corpus
+corpus.load(config.corpusTrain, true)
+```
+
 # Algorithm
 Basically, the shift-reduce algorithm is as follows:
-```
+```pseudo
 arcs = []
 while not buffer.isEmpty() or stack.size() > 1:
     action = getBestAction(stack, buffer)
