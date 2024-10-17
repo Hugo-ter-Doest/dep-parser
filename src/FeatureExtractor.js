@@ -1,5 +1,5 @@
 import * as ConlluUtil from './ConlluUtil.js'
-import config from './Config.js'
+import config from './Config.js';
 
 const DEBUG = false
 

@@ -2,11 +2,13 @@
 import extract from './extract.js'
 import train from './train.js'
 import test from './test.js'
+import config from './Config.js'
 
 const commands = {
   extract: extract,
   train: train,
   test: test,
+  iterate: iterate
 }
 
 const usage = () => {
@@ -14,7 +16,8 @@ const usage = () => {
   console.log('Commands:')
   console.log('  extract  Extract training patterns')
   console.log('  train    Train the model')
-  console.log('  test     Test the model\n')
+  console.log('  test     Test the model')
+  console.log('  iterate  Iterate through a list of values specified in Config.js')
 
   console.log('Environment variables for files and directoris:')
   console.log('  MODEL_FILE: Path to the model file')
@@ -41,6 +44,40 @@ const usage = () => {
   console.log('  TENSORFLOW_METRICS: metrics for the model')
   console.log('  TENSORFLOW_BATCH_SIZE: batch size for training')
   console.log('  TENSORFLOW_EPOCHS: number of epochs for training')
+}
+
+// Allows to specify a configuration item and a list of possible values
+// - path is an array of keys to the config item
+// - values is an array of possible values
+async function iterate () {
+  function setValueByPath(path, value) {
+    let current = config;
+    for (let i = 0; i < path.length - 1; i++) {
+      const key = path[i];
+      if (!Object.prototype.hasOwnProperty.call(current, key)) {
+        throw new Error(`Key '${key}' does not exist in the object`);
+      }
+      current = current[key];
+    }
+    current[path[path.length - 1]] = value;
+  }
+
+  const cmds = config.iterate.commands
+  const path = config.iterate.configItem
+  const values = config.iterate.values
+  
+  // Iterate over all possible values
+  for (let i = 0; i < values.length; i++) {
+    const value = values[i];
+    setValueByPath(path, value);
+    for (const cmd of cmds) {
+      if (commands[cmd]) {
+        await commands[cmd]();
+      } else {
+        throw new Error(`Unknown command: ${cmd}`);
+      }
+    }
+  }
 }
 
 const args = process.argv.slice(2)

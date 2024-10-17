@@ -1,17 +1,16 @@
 import fs from 'fs';
-import * as tf from '@tensorflow/tfjs-node';  // Import TensorFlow.js for Node.js
+import * as tf from '@tensorflow/tfjs-node';
 import PatternSet from './PatternSet.js';
 import config from './Config.js';
 
-export default () => {
+export default async () => {
   const patterns = new PatternSet()
-  patterns.load(config.patternsFile, (patterns) => {
-    console.log('Patterns loaded from ' + config.patternsFile)
-    trainTensorFlow(patterns)
-  })
+  await patterns.load(config.patternsFile)
+  console.log('Patterns loaded from ' + config.patternsFile)
+  await trainTensorFlow(patterns.getPatterns())
 }
 
-function trainTensorFlow (patterns) {
+async function trainTensorFlow (patterns) {
   const X = patterns.map(pattern => pattern.input)
   const y = patterns.map(pattern => pattern.output)
 
@@ -45,14 +44,14 @@ function trainTensorFlow (patterns) {
   
   model.summary()
 
-  model.fit(X_train, y_train, {
+  await model.fit(X_train, y_train, {
     epochs: config.TensorFlow.epochs,
     batchSize: config.TensorFlow.batchSize
   }).then((history) => {
     config.history = history
+    config.trainResultsFile = `trainResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
     fs.writeFileSync(config.trainResultsFile, JSON.stringify(config, null, 2))
     model.save(config.modelDir)
   })
-
 
 }

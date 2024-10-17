@@ -38,52 +38,50 @@ class PatternSet {
   }
 
   // Read the file with patterns
-  load (patternsFile, callback) {
-      
+  async load(patternsFile) {
     // Create a read stream
     const readStream = fs.createReadStream(patternsFile, {
       highWaterMark: 1024 * 1024, // Read 1MB chunks
       encoding: 'utf8'
     });
-
-    const patterns = []
-    // Handle each chunk of data
-    let buffer = ''
-
-    readStream.on('data', (chunk) => {
-      buffer += chunk.toString()
-      const lines = buffer.split('\n');
-      buffer = lines.pop(); // keep the last line, which may be incomplete
-      lines.forEach((line) => {
-        if (line === '[' || line === ']') {
-          return
-        }
-        let lineStripped = line
-        if (line[line.length - 1] === ',') {
-          lineStripped = line.slice(0, -1)
-        }
-        const pattern = JSON.parse(lineStripped)
-        patterns.push(pattern)
-        if (!pattern.input || !pattern.output) {
-          throw error 
-        }
-      })
-    })
-
-    readStream.on('end', () => {
-      if (buffer) {
-        console.log(patterns.length)
-      }
-      this.patterns = patterns
-      callback(patterns)
-    })
   
-    // Handle any errors
-    readStream.on('error', (err) => {
-      console.error(err)
-    })
+    const patterns = [];
+    let buffer = '';
+  
+    return new Promise((resolve, reject) => {
+      readStream.on('data', (chunk) => {
+        buffer += chunk.toString();
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // keep the last line, which may be incomplete
+        lines.forEach((line) => {
+          if (line === '[' || line === ']') {
+            return;
+          }
+          let lineStripped = line;
+          if (line[line.length - 1] === ',') {
+            lineStripped = line.slice(0, -1);
+          }
+          const pattern = JSON.parse(lineStripped);
+          patterns.push(pattern);
+          if (!pattern.input || !pattern.output) {
+            reject(new Error('Invalid pattern'));
+          }
+        });
+      });
+  
+      readStream.on('end', () => {
+        if (buffer) {
+          console.log(patterns.length);
+        }
+        this.patterns = patterns;
+        resolve(patterns);
+      });
+  
+      readStream.on('error', (err) => {
+        reject(err);
+      });
+    });
   }
-
 }
 
 export default PatternSet

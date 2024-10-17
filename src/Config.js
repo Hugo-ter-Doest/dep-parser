@@ -56,7 +56,7 @@ const testResultsFilePath = dataDir + testResultsfile
 const trainResultsfile = baseFilename + 'trainResults.json'
 const trainResultsFilePath = dataDir + trainResultsfile
 
-export default {
+const config = {
   corpusTrain: process.env.CORPUS_TRAIN || trainFilePath,
   corpusTest: process.env.CORPUS_TEST || testFilePath,
   failedSentencesFile: process.env.FAILED_SENTENCES_FILE || failedSentencesFilePath,
@@ -92,5 +92,13 @@ export default {
     metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
     batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 2000,
     epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 30
+  },
+  // Parameters for iterating: main iterate will use these values
+  iterate: {
+    commands: ['train', 'test'],
+    configItem: ['TensorFlow', 'batchSize'],
+    values: [500, 1000, 10000]
   }
 }
+
+export default config
