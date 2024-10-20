@@ -44,7 +44,7 @@ function printDependencyTree(parsedSentence) {
  * @param {Array} buffer - The buffer of tokens.
  * @returns {boolean} True if the parse was succesful, false otherwise.
  */
-function succesfullyProcessed(stack, buffer) {
+function completelyParsed(stack, buffer) {
     return ((stack.length === 1) && // Only one element is the root
     (buffer.length === 0) && // Buffer is fully processed
     (stack[0].head === 0)) // The root had no head
@@ -208,7 +208,7 @@ function encodeAction (action) {
 
 export {
   printDependencyTree,
-  succesfullyProcessed, 
+  completelyParsed,
   hasNonProjectiveStructure,
   logState,
   logResult,

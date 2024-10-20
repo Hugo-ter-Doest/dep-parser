@@ -9,12 +9,11 @@ npm install dep-parser
 # Usage
 The scripts for extracting feature patterns, training and testing the model are configured in `Config.js`. It allows configuration of all input and output files, configuration of the neural network itself, and training.
 
-There are three scripts for extracting feature patterns, training and testing the model resp.:
-```bash
-npm run extract
-npm run train
-npm run test
-```
+There is a Nodejs script `main` that has the following options:
+- extract
+- train
+- test
+- iterate
 
 # Conllu Format
 The package parses Universal Dependencies Conllu format. The Corpus class is used to load and save corpora in CoNLL-U format.

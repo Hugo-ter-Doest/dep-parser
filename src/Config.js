@@ -14,7 +14,7 @@ const UDPath = UDTreebankBase + languageDir
 const extension = '.conllu'
 const baseFilename = 'en_' + project.toLowerCase() + '-ud-'
 
-const devFilename =   baseFilename + 'dev' +    extension
+const devFilename = baseFilename + 'dev' +    extension
 
 let trainFilename = baseFilename + 'train' +  extension
 let testFilename = baseFilename + 'test' +   extension
@@ -90,14 +90,14 @@ const config = {
     optimizer: process.env.TENSORFLOW_OPTIMIZER || 'adam',
     loss: process.env.TENSORFLOW_LOSS || 'categoricalCrossentropy',
     metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
-    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 2000,
-    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 30
+    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 10000,
+    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 20
   },
   // Parameters for iterating: main iterate will use these values
   iterate: {
     commands: ['train', 'test'],
-    configItem: ['TensorFlow', 'batchSize'],
-    values: [500, 1000, 10000]
+    configItem: ['TensorFlow', 'epochs'],
+    values: [30, 40, 50]
   }
 }
 

@@ -87,7 +87,7 @@ class FeatureExtractor {
           } catch (error) {
             console.error(`Error while parsing sentence ${index}: ${error.message}`);
           }
-          const success = ConlluUtil.succesfullyProcessed(stack, buffer)
+          const success = ConlluUtil.completelyParsed(stack, buffer)
           // Only record features and actions for successful sentences
           if (success) {
             nrSucces++

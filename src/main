@@ -50,34 +50,48 @@ const usage = () => {
 // - path is an array of keys to the config item
 // - values is an array of possible values
 async function iterate () {
-  function setValueByPath(path, value) {
-    let current = config;
-    for (let i = 0; i < path.length - 1; i++) {
-      const key = path[i];
-      if (!Object.prototype.hasOwnProperty.call(current, key)) {
-        throw new Error(`Key '${key}' does not exist in the object`);
+  async function setIteration(config, cmd, path, value) {
+    return new Promise((resolve, reject) => {
+      config.iterate.currentIteration = {
+        command: cmd,
+        key: path,
+        value: value
       }
-      current = current[key];
-    }
-    current[path[path.length - 1]] = value;
+      let current = config;
+      for (let i = 0; i < path.length - 1; i++) {
+        const key = path[i]
+        if (current[key]) {
+          current = current[key]
+        } else {
+          throw new Error(`Key '${key}' does not exist in the object`);
+        }
+      }
+      current[path[path.length - 1]] = value;
+      resolve()
+    })
   }
 
   const cmds = config.iterate.commands
   const path = config.iterate.configItem
   const values = config.iterate.values
   
-  // Iterate over all possible values
-  for (let i = 0; i < values.length; i++) {
-    const value = values[i];
-    setValueByPath(path, value);
-    for (const cmd of cmds) {
-      if (commands[cmd]) {
-        await commands[cmd]();
-      } else {
-        throw new Error(`Unknown command: ${cmd}`);
+  async function iterate(values, cmds, path) {
+    for (let i = 0; i < values.length; i++) {
+      const value = values[i];
+      for (const cmd of cmds) {
+        if (commands[cmd]) {
+          await setIteration(config, cmd, path, value);
+          await commands[cmd]();
+        } else {
+          throw new Error(`Unknown command: ${cmd}`);
+        }
       }
+      // Wait for the entire iteration to complete before moving on to the next one
+      await new Promise(resolve => resolve());
     }
   }
+  
+  iterate(values, cmds, path);
 }
 
 const args = process.argv.slice(2)

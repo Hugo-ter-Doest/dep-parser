@@ -1,20 +1,22 @@
 import fs from 'fs';
 import * as tf from '@tensorflow/tfjs-node';
-import { succesfullyProcessed, recallPrecision } from './ConlluUtil.js';
+import { completelyParsed, recallPrecision } from './ConlluUtil.js';
 import Corpus from './Corpus.js';
 import ShiftReduceParser from './ShiftReduceParser.js';
 import config from './Config.js';
 
-export default () => {
-  // Load the model
-  tf.loadLayersModel(config.modelFile)
-    .then(model => {
-      console.log('Model loaded!');
-      test(model)
-    })
-    .catch(err => {
-      console.error(err)
-    })
+export default async () => {
+  return new Promise((resolve, reject) => {
+    tf.loadLayersModel(config.modelFile)
+      .then(model => {
+        console.log('Model loaded!');
+        test(model)
+        resolve()
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 }
 
 function test (classifier) {
@@ -32,7 +34,7 @@ function test (classifier) {
   // Parse the test sentence
   corpus.getSentences().forEach(s => {
     const { stack, buffer, arcs } = parser.parse(s)
-    if (succesfullyProcessed(stack, buffer)) {
+    if (completelyParsed(stack, buffer)) {
       nrSuccess++
     }
     const result = recallPrecision(s, arcs)
@@ -48,7 +50,7 @@ function test (classifier) {
   const averageRecall = (recallSum / nrSentences * 100).toFixed(2)
   const averagePrecision = (precisionSum / nrSentences * 100).toFixed(2)
 
-  config.results = {
+  config.testResults = {
     successRate: percentageSuccess,
     averageRecall: averageRecall,
     averagePrecision: averagePrecision
@@ -57,8 +59,9 @@ function test (classifier) {
   // Save the results
   config.testResultsFile = `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
   fs.writeFileSync(config.testResultsFile, JSON.stringify(config, null, 2))
+  config.testResults = null
 
-  console.log('Percentage of successful parses: ', percentageSuccess + '%')
+  console.log('Percentage of complete parses: ', percentageSuccess + '%')
   console.log('Average recall:', averageRecall + '%')
   console.log('Average precision:', averagePrecision + '%')
 }

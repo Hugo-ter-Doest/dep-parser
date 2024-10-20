@@ -4,10 +4,11 @@ import PatternSet from './PatternSet.js';
 import config from './Config.js';
 
 export default async () => {
+  console.log(config)
   const patterns = new PatternSet()
   await patterns.load(config.patternsFile)
   console.log('Patterns loaded from ' + config.patternsFile)
-  await trainTensorFlow(patterns.getPatterns())
+  return trainTensorFlow(patterns.getPatterns())
 }
 
 async function trainTensorFlow (patterns) {
@@ -27,7 +28,7 @@ async function trainTensorFlow (patterns) {
   const model = tf.sequential()
 
   // Input layer
-  model.add(tf.layers.dense({ units: config.TensorFlow.layers[0].units, inputShape: [inputLength], activation: config.TensorFlow.layers[0].activation }))
+  model.add(tf.layers.dense({ inputShape: [inputLength], activation: config.TensorFlow.layers[0].activation }))
 
   // Hidden layers (optional)
   model.add(tf.layers.dense({ units: config.TensorFlow.layers[1].units, activation: config.TensorFlow.layers[1].activation }))
@@ -44,14 +45,14 @@ async function trainTensorFlow (patterns) {
   
   model.summary()
 
-  await model.fit(X_train, y_train, {
+  return model.fit(X_train, y_train, {
     epochs: config.TensorFlow.epochs,
     batchSize: config.TensorFlow.batchSize
-  }).then((history) => {
-    config.history = history
+  }).then(async (history) => {
+    config.trainResults = history
     config.trainResultsFile = `trainResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
     fs.writeFileSync(config.trainResultsFile, JSON.stringify(config, null, 2))
-    model.save(config.modelDir)
+    config.trainResults = null
+    await model.save(config.modelDir)
   })
-
 }
