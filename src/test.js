@@ -57,7 +57,7 @@ function test (classifier) {
   }
 
   // Save the results
-  config.testResultsFile = `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
+  config.testResultsFile = config.dataDir + `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
   fs.writeFileSync(config.testResultsFile, JSON.stringify(config, null, 2))
   config.testResults = null
 

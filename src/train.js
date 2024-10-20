@@ -28,7 +28,7 @@ async function trainTensorFlow (patterns) {
   const model = tf.sequential()
 
   // Input layer
-  model.add(tf.layers.dense({ inputShape: [inputLength], activation: config.TensorFlow.layers[0].activation }))
+  model.add(tf.layers.dense({ inputShape: [inputLength], units: inputLength, activation: config.TensorFlow.layers[0].activation }))
 
   // Hidden layers (optional)
   model.add(tf.layers.dense({ units: config.TensorFlow.layers[1].units, activation: config.TensorFlow.layers[1].activation }))
@@ -50,7 +50,7 @@ async function trainTensorFlow (patterns) {
     batchSize: config.TensorFlow.batchSize
   }).then(async (history) => {
     config.trainResults = history
-    config.trainResultsFile = `trainResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
+    config.trainResultsFile = config.outputDir + `trainResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
     fs.writeFileSync(config.trainResultsFile, JSON.stringify(config, null, 2))
     config.trainResults = null
     await model.save(config.modelDir)

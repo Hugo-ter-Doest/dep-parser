@@ -57,6 +57,8 @@ const trainResultsfile = baseFilename + 'trainResults.json'
 const trainResultsFilePath = dataDir + trainResultsfile
 
 const config = {
+  outputDir: dataDir,
+
   corpusTrain: process.env.CORPUS_TRAIN || trainFilePath,
   corpusTest: process.env.CORPUS_TEST || testFilePath,
   failedSentencesFile: process.env.FAILED_SENTENCES_FILE || failedSentencesFilePath,
