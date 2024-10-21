@@ -6,21 +6,19 @@
  */
 
 import tf from '@tensorflow/tfjs-node'
-import { extractFeatures,
-  actionVocab,
-  logState
-} from './ConlluUtil.js'
+import { logState, actionVocab } from './ConlluUtil.js'
+import Pattern from './Pattern.js';
 
 const DEBUG = true
 
 class ShiftReduceParser {
 
   constructor(model, corpus) {
-      this.stack = [];
-      this.buffer = []
-      this.arcs = []
-      this.model = model
-      this.corpus = corpus
+    this.stack = [];
+    this.buffer = []
+    this.arcs = []
+    this.model = model
+    this.corpus = corpus
   }
 
   /**
@@ -69,29 +67,12 @@ class ShiftReduceParser {
     return false
   }
 
-  getAction (stack, buffer) {
-    const features = extractFeatures(stack, buffer, this.corpus.getFormVoca(), this.corpus.getUpostagVoca())
-    const actions = Object.keys(actionVocab)
-
-    const inputSample = tf.tensor2d(features, [1, features.length])
-
-    const scores = this.model.predict(inputSample).dataSync()
-    console.log(scores)
-
-    const { maxValue, maxIndex } = scores.reduce((acc, current, index) => {
-      if (current > acc.maxValue) {
-        return { maxValue: current, maxIndex: index }
-      }
-      return acc
-    }, { maxValue: -Infinity, maxIndex: -1 })
-    return actions[maxIndex]
-  }
-
   // A method that returns the four possible actions sorted by probability
   getSortedActions (stack, buffer) {
     const actions = Object.keys(actionVocab)
-    const features = extractFeatures(stack, buffer, this.corpus.getFormVoca(), this.corpus.getUpostagVoca())
-    const inputSample = tf.tensor2d(features, [1, features.length])
+    const pattern = new Pattern()
+    pattern.buildInputVector(stack, buffer, this.corpus.getFormVoca(), this.corpus.getUpostagVoca())
+    const inputSample = tf.tensor2d(pattern.input, [1, pattern.input.length])
     const scores = this.model.predict(inputSample).dataSync()
     // Return the four possible actions sorted by probability
     return actions

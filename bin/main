@@ -7,10 +7,7 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-import extract from '../src/extract.js'
-import train from '../src/train.js'
-import test from '../src/test.js'
-import config from '../src/Config.js'
+import { extract, train, test, config } from '../src/index.js'
 
 const commands = {
   extract: extract,

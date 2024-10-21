@@ -5,6 +5,7 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-export extract from './extract.js'
-export train from './train.js'
-export test from './test.js'
+export { default as extract } from './extract.js'
+export { default as train } from './train.js'
+export { default as test } from './test.js'
+export { default as config } from './Config.js'

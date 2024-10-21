@@ -6,6 +6,7 @@
  */
 
 import * as ConlluUtil from './ConlluUtil.js'
+import Pattern from './Pattern.js';
 import config from './Config.js';
 
 const DEBUG = false
@@ -38,8 +39,9 @@ class FeatureExtractor {
 
         try {
             while (buffer.length > 0 || stack.length > 1) {
-                const trainingPattern = {}
-                trainingPattern.input = ConlluUtil.extractFeatures(stack, buffer, this.corpus.formVocab, this.corpus.upostagVocab)
+                const trainingPattern = new Pattern()
+                trainingPattern.buildInputVector(stack, buffer, 
+                  this.corpus.formVocab, this.corpus.upostagVocab)
                 const swapIndexes = this.detectSwapIndices(stack, buffer);
                 if (swapIndexes) {
                   nrNonProjective++
@@ -87,7 +89,7 @@ class FeatureExtractor {
                   this.shift(buffer, stack);
                 }
                 DEBUG && ConlluUtil.logState(sentence, stack, buffer, action, swapIndexes, hasDependentsInBuffer)
-                trainingPattern.output = ConlluUtil.encodeAction(action)
+                trainingPattern.buildOutputVector(action)
                 sentenceTrainingPatterns.push(trainingPattern)
                 DEBUG && console.log(trainingPattern)
             }
