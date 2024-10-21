@@ -55,6 +55,14 @@ The feature extraction is done with the `extractFeatures` function. Currently it
 - [tensorflow/tfjs-node](https://www.npmjs.com/package/@tensorflow/tfjs-node) for the neural network
 - [Jasmine](https://www.npmjs.com/package/jasmine) for testing with Jasmine
 
+# References
+- [Universal Dependencies](https://universaldependencies.org/)
+- [CoNLL-U format](https://universaldependencies.org/format.html)
+- [TFJS](https://www.npmjs.com/package/@tensorflow/tfjs-node)
+- [Jasmine](https://www.npmjs.com/package/jasmine)
+
+# Authors
+Hugo W.L. ter Doest, Ugo Software
 
 # License
 This package is licensed under the [EUPL-1.2](https://spdx.org/licenses/EUPL-1.2.html) license.
