@@ -30,11 +30,9 @@ class ShiftReduceParser {
    * @param {Object[]} sentence - The sentence to parse.
    */
   initialize (sentence) {
-      this.stack = [];
-      this.buffer = [...sentence];  // Shallow copy of the sentence to avoid modifying the original
-      this.arcs = [];
-      // this.shift()
-      // this.shift()
+    this.stack = []
+    this.buffer = [...sentence.getTokens()]  // Shallow copy of the sentence to avoid modifying the original
+    this.arcs = []
   }
 
   /**

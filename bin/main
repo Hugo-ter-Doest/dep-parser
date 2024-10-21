@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * Copyright (c) 2024 Hugo W.L. ter Doest, Ugo Software
  *
@@ -5,11 +7,10 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-#!/usr/bin/env node
-import extract from './extract.js'
-import train from './train.js'
-import test from './test.js'
-import config from './Config.js'
+import extract from '../src/extract.js'
+import train from '../src/train.js'
+import test from '../src/test.js'
+import config from '../src/Config.js'
 
 const commands = {
   extract: extract,

@@ -7,6 +7,7 @@
 
 import fs from 'fs';
 import  config from './Config.js';
+import Sentence from './Sentence.js';
 
 const DEBUG = true
 
@@ -125,7 +126,7 @@ class Corpus {
     }
     const text = indexes.map(index => {
       const sentence = sentences[index]
-      const tokens = sentence.map(token => {
+      const tokens = sentence.getTokens().map(token => {
         return `${token.id}\t${token.form}\t${token.lemma}\t${token.upostag}\t${token.head}\t${token.deprel}`
       });
       return `# Sentence: ${index + 1}\n${tokens.join('\n')}`
@@ -135,14 +136,14 @@ class Corpus {
 
   parse (text, extracting) {
     this.sentences = []
-    let sentence = []
+    let sentence = new Sentence
 
     text.split('\n').forEach((line, index) => {
         if (line.startsWith('#') || line.trim() === '') {
             // Skip comments and empty lines
-            if (sentence.length > 0) {
+            if (sentence.length() > 0) {
                 this.sentences.push(sentence);
-                sentence = [];
+                sentence = new Sentence();
             }
         } else {
             const parts = line.split('\t');
@@ -158,7 +159,7 @@ class Corpus {
                     head: parseInt(parts[6]),
                     deprel: parts[7]
                 };
-                sentence.push(token)
+                sentence.addToken(token)
 
                 if (extracting) {
                   this.updateVocabularies(token)
@@ -168,7 +169,7 @@ class Corpus {
         }
     })
     // Add this line to push the last sentence to the sentences array
-    if (sentence.length > 0) {
+    if (sentence.length() > 0) {
         this.sentences.push(sentence)
     }
     DEBUG && console.log(`Parsed ${this.sentences.length} sentences.`);

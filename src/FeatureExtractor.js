@@ -25,12 +25,12 @@ class FeatureExtractor {
     const failedSentences = []
 
     this.corpus.getSentences().forEach((sentence, index) => {
-        if (ConlluUtil.hasNonProjectiveStructure(sentence)) {
+        if (sentence.hasNonProjectiveStructure()) {
           nrNonProjectiveSentences++
           // return
         }
         let stack = [];
-        let buffer = [...sentence]; // Copy the sentence tokens into buffer
+        let buffer = [...sentence.getTokens()]; // Copy the sentence tokens into buffer
         const sentenceTrainingPatterns = []
         let action = null
         const arcs = []

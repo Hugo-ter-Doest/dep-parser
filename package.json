@@ -5,14 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "node ./src/test.js",
-    "extract": "node --max-old-space-size=8192 ./src/extract.js",
-    "train": "node --max-old-space-size=8192 ./src/train.js"
   },
   "keywords": [
     "dependency",
     "parsing",
-    "statistics",
     "machine learning"
   ],
   "author": "Hugo W.L. ter Doest",

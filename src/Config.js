@@ -63,6 +63,9 @@ const testResultsFilePath = dataDir + testResultsfile
 const trainResultsfile = baseFilename + 'trainResults.json'
 const trainResultsFilePath = dataDir + trainResultsfile
 
+const extractResultsfile = baseFilename + 'extractResults.json'
+const extractResultsFilePath = dataDir + extractResultsfile
+
 const config = {
   outputDir: dataDir,
 
@@ -79,6 +82,7 @@ const config = {
   modelFile: process.env.MODEL_FILE || modelFilePath,
   testResultsFile: process.env.TEST_RESULTS_FILE || testResultsFilePath,
   trainResultsFile: process.env.TRAIN_RESULTS_FILE || trainResultsFilePath,
+  extractResultsFile: process.env.EXTRACT_RESULTS_FILE || extractResultsFilePath,	
 
   // Parameters for training TensorFlow
   TensorFlow: {

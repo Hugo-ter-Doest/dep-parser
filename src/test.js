@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import * as tf from '@tensorflow/tfjs-node';
-import { completelyParsed, recallPrecision } from './ConlluUtil.js';
+import { completelyParsed } from './ConlluUtil.js';
 import Corpus from './Corpus.js';
 import ShiftReduceParser from './ShiftReduceParser.js';
 import config from './Config.js';
@@ -44,7 +44,7 @@ function test (classifier) {
     if (completelyParsed(stack, buffer)) {
       nrSuccess++
     }
-    const result = recallPrecision(s, arcs)
+    const result = s.recallPrecision(arcs)
     if (result) {
       recallSum += result.recall
       precisionSum += result.precision
@@ -64,7 +64,7 @@ function test (classifier) {
   }
 
   // Save the results
-  config.testResultsFile = config.dataDir + `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
+  config.testResultsFile = config.outputDir + `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
   fs.writeFileSync(config.testResultsFile, JSON.stringify(config, null, 2))
   config.testResults = null
 
