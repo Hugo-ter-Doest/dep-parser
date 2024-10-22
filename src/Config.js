@@ -82,7 +82,11 @@ const config = {
   modelFile: process.env.MODEL_FILE || modelFilePath,
   testResultsFile: process.env.TEST_RESULTS_FILE || testResultsFilePath,
   trainResultsFile: process.env.TRAIN_RESULTS_FILE || trainResultsFilePath,
-  extractResultsFile: process.env.EXTRACT_RESULTS_FILE || extractResultsFilePath,	
+  extractResultsFile: process.env.EXTRACT_RESULTS_FILE || extractResultsFilePath,
+
+  // Stack and buffer depth for feature construction
+  stackDepth: parseInt(process.env.STACK_DEPTH, 10) || 3,
+  bufferDepth: parseInt(process.env.BUFFER_DEPTH, 10) || 3,
 
   // Parameters for training TensorFlow
   TensorFlow: {
@@ -103,7 +107,7 @@ const config = {
     optimizer: process.env.TENSORFLOW_OPTIMIZER || 'adam',
     loss: process.env.TENSORFLOW_LOSS || 'categoricalCrossentropy',
     metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
-    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 10000,
+    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 1000,
     epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 20
   },
   // Parameters for iterating: main iterate will use these values
