@@ -6,7 +6,7 @@
  */
 
 import fs from 'fs'
-import ConlluUtil from './ConlluUtil'
+import ConlluUtil from './Util'
 
 const corpusFile = './test_data/test_sentences.conllu'
 //const corpusFile = '../../ud-treebanks-v2.14/UD_English-GUM/' + 'en_gum-ud-dev.conllu'

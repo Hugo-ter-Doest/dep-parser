@@ -6,7 +6,7 @@
  */
 
 import tf from '@tensorflow/tfjs-node'
-import { logState, actionVocab } from './ConlluUtil.js'
+import { logState, actionVocab } from './Util.js'
 import Pattern from './Pattern.js';
 
 const DEBUG = true

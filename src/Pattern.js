@@ -5,7 +5,7 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-import { actionVocab } from './ConlluUtil.js';
+import { actionVocab } from './Util.js';
 import crypto from 'crypto';
 const DEBUG = false
 

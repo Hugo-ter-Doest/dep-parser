@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import * as tf from '@tensorflow/tfjs-node';
-import { completelyParsed } from './ConlluUtil.js';
+import { completelyParsed } from './Util.js';
 import Corpus from './Corpus.js';
 import ShiftReduceParser from './ShiftReduceParser.js';
 import config from './Config.js';

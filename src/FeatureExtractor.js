@@ -5,7 +5,7 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-import * as ConlluUtil from './ConlluUtil.js'
+import * as ConlluUtil from './Util.js'
 import Pattern from './Pattern.js';
 import config from './Config.js';
 
