@@ -64,16 +64,16 @@ class Pattern {
       stackTopWord, ...stackTopPOSTag,
       bufferFirstWord, ...bufferFirstPOSTag
     ]
-    if (config.stackDepth === 2) {
+    if (config.stackDepth > 1) {
       this.input = this.input.concat([stackBelowWord, ...stackBelowPOSTag])
     }
-    if (config.stackDepth === 3) {
+    if (config.stackDepth > 2) {
       this.input = this.input.concat([stack2BelowWord, ...stack2BelowPOSTag])
     }
-    if (config.bufferDepth === 2) {
+    if (config.bufferDepth > 1) {
       this.input = this.input.concat([bufferSecondWord, ...bufferSecondTag])
     }
-    if (config.bufferDepth === 3) {
+    if (config.bufferDepth > 2) {
       this.input = this.input.concat([buffer3rdWord, ...buffer3rdTag])
     }
   }

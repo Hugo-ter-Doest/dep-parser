@@ -6,6 +6,9 @@
  */
 
 // Configuration file to steer the extraction, training and testing process from one config
+// file
+// DEV = true: use the dev set
+// DEV = false: use the train and test sets
 const DEV = false
 
 // ========================================================================================
