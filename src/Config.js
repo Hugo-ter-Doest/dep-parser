@@ -88,8 +88,8 @@ const config = {
   extractResultsFile: process.env.EXTRACT_RESULTS_FILE || extractResultsFilePath,
 
   // Stack and buffer depth for feature construction
-  stackDepth: parseInt(process.env.STACK_DEPTH, 10) || 3,
-  bufferDepth: parseInt(process.env.BUFFER_DEPTH, 10) || 3,
+  stackDepth: parseInt(process.env.STACK_DEPTH, 10) || 2,
+  bufferDepth: parseInt(process.env.BUFFER_DEPTH, 10) || 1,
 
   // Parameters for training TensorFlow
   TensorFlow: {
@@ -97,27 +97,27 @@ const config = {
       {
         units: parseInt(process.env.TENSORFLOW_INPUTLAYER_UNITS, 10) || 128,
         activation: process.env.TENSORFLOW_INPUTLAYER_ACTIVATION || 'relu' 
-      }, 
+      },
       {
-        units: parseInt(process.env.TENSORFLOW_HIDDENLAYER_UNITS, 10) || 64,
+        units: parseInt(process.env.TENSORFLOW_HIDDENLAYER_UNITS, 10) || 128,
         activation: process.env.TENSORFLOW_HIDDENLAYER_ACTIVATION || 'relu'
       },
       {
-        units: parseInt(process.env.TENSORFLOW_OUTPUTLAYER_UNITS, 10) || 4,
+        units: parseInt(process.env.TENSORFLOW_OUTPUTLAYER_UNITS, 10) || 3,
         activation: process.env.TENSORFLOW_OUPUTLAYER_ACTIVATION || 'softmax'
       }
     ],
     optimizer: process.env.TENSORFLOW_OPTIMIZER || 'adam',
     loss: process.env.TENSORFLOW_LOSS || 'categoricalCrossentropy',
     metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
-    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 1000,
-    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 20
+    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 301648,
+    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 50
   },
   // Parameters for iterating: main iterate will use these values
   iterate: {
     commands: ['train', 'test'],
-    configItem: ['TensorFlow', 'epochs'],
-    values: [30, 40, 50]
+    configItem: ['TensorFlow', 'batchSize'],
+    values: [10000, 15000, 20000]
   }
 }
 

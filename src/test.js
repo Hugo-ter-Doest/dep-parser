@@ -35,6 +35,7 @@ function test (classifier) {
   // Instantiate the parser with the trained model
   const parser = new ShiftReduceParser(classifier, corpus)
 
+  let nrComplete = 0
   let nrSuccess = 0
   let recallSum = 0
   let precisionSum = 0
@@ -42,23 +43,28 @@ function test (classifier) {
   corpus.getSentences().forEach(s => {
     const { stack, buffer, arcs } = parser.parse(s)
     if (completelyParsed(stack, buffer)) {
-      nrSuccess++
+      nrComplete++
     }
     const result = s.recallPrecision(arcs)
     if (result) {
       recallSum += result.recall
       precisionSum += result.precision
       console.log('Recall:', result.recall, 'Precision:', result.precision)
+      if (result.recall === 1 && result.precision === 1) {
+        nrSuccess++
+      }
     }
   })
 
   const nrSentences = corpus.getSentences().length
+  const percentageComplete = (nrComplete / nrSentences * 100).toFixed(2)
   const percentageSuccess = (nrSuccess / nrSentences * 100).toFixed(2)
   const averageRecall = (recallSum / nrSentences * 100).toFixed(2)
   const averagePrecision = (precisionSum / nrSentences * 100).toFixed(2)
 
   config.testResults = {
     successRate: percentageSuccess,
+    completeRate: percentageComplete,
     averageRecall: averageRecall,
     averagePrecision: averagePrecision
   }
@@ -66,9 +72,6 @@ function test (classifier) {
   // Save the results
   config.testResultsFile = config.outputDir + `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
   fs.writeFileSync(config.testResultsFile, JSON.stringify(config, null, 2))
+  console.log(config.testResults)
   config.testResults = null
-
-  console.log('Percentage of complete parses: ', percentageSuccess + '%')
-  console.log('Average recall:', averageRecall + '%')
-  console.log('Average precision:', averagePrecision + '%')
 }

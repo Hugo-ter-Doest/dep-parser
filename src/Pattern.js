@@ -41,7 +41,9 @@ class Pattern {
     const bufferFirst = buffer[0] || { form: 'NULL', upostag: 'NULL' }
     const bufferSecond = buffer[1] || { form: 'NULL', upostag: 'NULL' }
     const buffer3rd = buffer[2] || { form: 'NULL', upostag: 'NULL' }
-  
+    const buffer4th = buffer[3] || { form: 'NULL', upostag: 'NULL' }
+
+    
     // Normalized hash for word form encoding (value between 0 and 1)
     const stackTopWord = hashWordToNormalized(stackTop.form, formVocab)
     const stackBelowWord = hashWordToNormalized(stackBelow.form, formVocab)
@@ -49,7 +51,8 @@ class Pattern {
     const bufferFirstWord = hashWordToNormalized(bufferFirst.form, formVocab)
     const bufferSecondWord = hashWordToNormalized(bufferSecond.form, formVocab)
     const buffer3rdWord = hashWordToNormalized(buffer3rd.form, formVocab)
-  
+    const buffer4thWord = hashWordToNormalized(buffer4th.form, formVocab)
+    
     // One-hot encoding for POS tags (example for a small tag set)
     const stackTopPOSTag = oneHotEncode(stackTop.upostag, upostagVocab)
     const stackBelowPOSTag = oneHotEncode(stackBelow.upostag, upostagVocab)
@@ -57,6 +60,7 @@ class Pattern {
     const bufferFirstPOSTag = oneHotEncode(bufferFirst.upostag, upostagVocab)
     const bufferSecondTag = oneHotEncode(bufferSecond.upostag, upostagVocab)
     const buffer3rdTag = oneHotEncode(buffer3rd.upostag, upostagVocab)
+    const buffer4thTag = oneHotEncode(buffer4th.upostag, upostagVocab)
   
     // Combine all features into a single vector depending on depth parameters
     // Base is depth 1 for both stack and buffer
@@ -76,6 +80,9 @@ class Pattern {
     if (config.bufferDepth > 2) {
       this.input = this.input.concat([buffer3rdWord, ...buffer3rdTag])
     }
+    if (config.bufferDepth > 3) {
+      this.input = this.input.concat([buffer4thWord, ...buffer4thTag])
+    }
   }
 
   buildOutputVector(action) {
@@ -85,4 +92,3 @@ class Pattern {
 }
 
 export default Pattern
-  

@@ -134,6 +134,53 @@ class Corpus {
     return text
   }
 
+  /*
+  From https://universaldependencies.org/format.html:
+  
+  Annotations are encoded in plain text files (UTF-8, normalized to NFC, using
+  only the LF character as line break, including an LF character at the end of
+  file) with three types of lines:
+
+  Word lines containing the annotation of a word/token/node in 10 fields 
+  separated by single tab characters; see below. Blank lines marking sentence 
+  boundaries. The last line of each sentence is a blank line. Sentence-level 
+  comments starting with hash (#). Comment lines occur at the beginning of 
+  sentences, before word lines.
+
+  Sentences consist of one or more word lines, and word lines contain the 
+  following fields:
+
+  1. ID: Word index, integer starting at 1 for each new sentence; may be a range 
+      for multiword tokens; may be a decimal number for empty nodes (decimal 
+      numbers can be lower than 1 but must be greater than 0).
+  2. FORM: Word form or punctuation symbol.
+  3. LEMMA: Lemma or stem of word form.
+  4. UPOS: Universal part-of-speech tag.
+  5. XPOS: Optional language-specific (or treebank-specific) part-of-speech / 
+      morphological tag; underscore if not available.
+  6. FEATS: List of morphological features from the universal feature inventory 
+      or from a defined language-specific extension; underscore if not 
+      available.
+  7. HEAD: Head of the current word, which is either a value of ID or zero (0).
+  8. DEPREL: Universal dependency relation to the HEAD (root iff HEAD = 0) or a 
+      defined language-specific subtype of one.
+  9. DEPS: Enhanced dependency graph in the form of a list of head-deprel pairs.
+  10. MISC: Any other annotation.
+
+  The fields must additionally meet the following constraints:
+
+  * Fields must not be empty.
+  * Fields other than FORM, LEMMA, and MISC must not contain space characters.
+  * Underscore (_) is used to denote unspecified values in all fields except ID. 
+  Note that no format-level distinction is made for the rare cases where the 
+  FORM or LEMMA is the literal underscore – processing in such cases is 
+  application-dependent. Further, in UD treebanks the UPOS, HEAD, and DEPREL 
+  columns are not allowed to be left unspecified except in multiword tokens, 
+  where all must be unspecified, and empty nodes, where UPOS is optional and 
+  HEAD and DEPREL must be unspecified. The enhanced DEPS annotation is 
+  optional in UD treebanks, but if it is provided, it must be provided for all 
+  sentences in the treebank.
+  */
   parse (text, extracting) {
     this.sentences = []
     let sentence = new Sentence

@@ -8,7 +8,7 @@
 import crypto from 'crypto';
 const DEBUG = false
 
-let actionVocab = { 'shift': 0, 'leftArc': 1, 'rightArc': 2, 'swap': 3 };
+let actionVocab = { 'shift': 0, 'leftArc': 1, 'rightArc': 2 };
 
 /**
  * Checks whether the parser has succesfully processed the sentence.

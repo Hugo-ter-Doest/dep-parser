@@ -52,6 +52,17 @@ async function trainTensorFlow (patterns) {
   
   model.summary()
 
+  let trainConfig = null
+  if (config.TensorFlow.batchSize) {
+    trainConfig = {
+      epochs: config.TensorFlow.epochs,
+      batchSize: config.TensorFlow.batchSize
+    }
+  } else {
+    trainConfig = {
+      epochs: config.TensorFlow.epochs
+    }
+  }
   return model.fit(X_train, y_train, {
     epochs: config.TensorFlow.epochs,
     batchSize: config.TensorFlow.batchSize
