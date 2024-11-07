@@ -13,12 +13,13 @@ const DEBUG = true
 
 class ShiftReduceParser {
 
-  constructor(model, corpus) {
+  constructor(model, corpus, word2vecModel) {
     this.stack = [];
     this.buffer = []
     this.arcs = []
     this.model = model
     this.corpus = corpus
+    this.word2vecModel = word2vecModel
   }
 
   /**
@@ -71,7 +72,11 @@ class ShiftReduceParser {
   getSortedActions (stack, buffer) {
     const actions = Object.keys(actionVocab)
     const pattern = new Pattern()
-    pattern.buildInputVector(stack, buffer, this.corpus.getFormVoca(), this.corpus.getUpostagVoca())
+    pattern.buildInputVector(stack, buffer, { 
+      formVocab: this.corpus.getFormVoca(), 
+      upostagVocab: this.corpus.getUpostagVoca(),
+      word2vecModel: this.word2vecModel
+    })
     const inputSample = tf.tensor2d(pattern.input, [1, pattern.input.length])
     const scores = this.model.predict(inputSample).dataSync()
     // Return the four possible actions sorted by probability

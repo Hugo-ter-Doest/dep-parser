@@ -5,10 +5,13 @@
  * See: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  */
 
-import crypto from 'crypto';
 const DEBUG = false
 
-let actionVocab = { 'shift': 0, 'leftArc': 1, 'rightArc': 2 };
+let actionVocab = { 
+  'shift': 0, 
+  'leftArc': 1, 
+  'rightArc': 2
+}
 
 /**
  * Checks whether the parser has succesfully processed the sentence.
@@ -28,7 +31,7 @@ const green = '\x1b[32m'
 const red = '\x1b[31m'
 const reset = '\x1b[0m'
 
-function logState (sentence, stack, buffer, action, swapIndexes, hasDependentsInBuffer) {
+function logState (sentence, stack, buffer, action, hasDependentsInBuffer) {
   const flag = '=========================================================================================';
   // const sentenceString =    'SENTENCE: [' + (sentence.map(token => token.form).join(' ')) +']'
   const sentenceString =    'SENTENCE: ' + red + '[' + reset + (sentence.getTokens().map(token => token.form).join(' ')) + red + ']' + reset
@@ -37,8 +40,8 @@ function logState (sentence, stack, buffer, action, swapIndexes, hasDependentsIn
   // const bufferString =      'BUFFER:   ' + '<' + buffer.map(token => "\"" + token.form + "\"").join(', ') + ']'
   const bufferString =      'BUFFER:   ' + red + '<' + reset + buffer.map(token => "\"" + token.form + "\"").join(', ') + red +']' + reset
   const actionString =      'ACTION:   ' + action + (hasDependentsInBuffer ? ' (HAS DEPENDENTS IN BUFFER)' : '')
-  const swapIndexesString = ((swapIndexes !== null) ? ' | SWAP: ' + JSON.stringify(swapIndexes) : '')
-  console.log(`${flag}\n${sentenceString}\n${actionString}${swapIndexesString}\n${stackString}\n${bufferString}`)
+  // const swapIndexesString = ((swapIndexes !== null) ? ' | SWAP: ' + JSON.stringify(swapIndexes) : '')
+  console.log(`${flag}\n${sentenceString}\n${actionString}\n${stackString}\n${bufferString}`)
 }
 
 function logResult (success, actions) {

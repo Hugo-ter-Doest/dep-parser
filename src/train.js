@@ -41,7 +41,7 @@ async function trainTensorFlow (patterns) {
   model.add(tf.layers.dense({ units: config.TensorFlow.layers[1].units, activation: config.TensorFlow.layers[1].activation }))
 
   // Output layer for multi-class classification (e.g., 4 classes)
-  model.add(tf.layers.dense({ units: config.TensorFlow.layers[2].units, activation: config.TensorFlow.layers[2].activation }))  // 4 output neurons
+  model.add(tf.layers.dense({ units: config.TensorFlow.layers[2].units, activation: config.TensorFlow.layers[2].activation }))
 
   // Compile the model with categorical crossentropy
   model.compile({
@@ -68,7 +68,21 @@ async function trainTensorFlow (patterns) {
     batchSize: config.TensorFlow.batchSize
   }).then(async (history) => {
     config.trainResults = history
-    config.trainResultsFile = config.outputDir + `trainResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
+
+    const timestamp = new Date();
+    const options = {
+      timeZone: 'Europe/Amsterdam',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
+    const localizedTimestamp = timestamp.toLocaleString('nl-NL', options).replace(/:/g, '-').replace(/,/g, '--').replace(/\s+/g, '');
+
+    config.trainResultsFile = config.outputDir + `trainResults-${localizedTimestamp}.json`;
     fs.writeFileSync(config.trainResultsFile, JSON.stringify(config, null, 2))
     config.trainResults = null
     await model.save(config.modelDir)

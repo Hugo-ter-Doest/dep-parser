@@ -9,7 +9,7 @@
 // file
 // DEV = true: use the dev set
 // DEV = false: use the train and test sets
-const DEV = false
+const DEV = true
 
 // ========================================================================================
 // If you set these three parameters, the rest of the filenames are automatically generated
@@ -37,13 +37,15 @@ if (DEV) { // Override train and test corpora with dev
 const trainFilePath = UDPath + trainFilename
 const testFilePath =  UDPath + testFilename
 
-// ========================================================================================
-// This directory is used for all output of the extract, train and test processes
+// =============================================================================
+// These directories are used for all inputs, models and outputs of the extract,
+// train and test processes
 const dataDir = './data/output/'
-// ========================================================================================
+const modelDir = './data/models/'
+// =============================================================================
 
-const modelPath = 'file://' + dataDir + baseFilename + 'model/'
-const modelFilePath = modelPath + 'model.json'
+const tensorFlowModelPath = 'file://' + modelDir + baseFilename + 'model/'
+const tensorFlowModelFilePath = tensorFlowModelPath + 'model.json'
 
 const lemmaFile = baseFilename + 'lemma' + '.json'
 const lemmaFilePath = dataDir + lemmaFile
@@ -69,6 +71,8 @@ const trainResultsFilePath = dataDir + trainResultsfile
 const extractResultsfile = baseFilename + 'extractResults.json'
 const extractResultsFilePath = dataDir + extractResultsfile
 
+const word2vecFilePath = modelDir + 'GoogleNews-vectors-negative300.bin'
+
 const config = {
   outputDir: dataDir,
 
@@ -80,16 +84,21 @@ const config = {
   upostagFile: process.env.UPOSTAG_FILE || upostagFilePath,
   patternsFile: process.env.PATTERNS_FILE || patternsFilePath,
   // Use modelDir when saving
-  modelDir: process.env.MODEL_DIR || modelPath,
+  modelDir: process.env.MODEL_DIR || tensorFlowModelPath,
   // Use modelFile when loading
-  modelFile: process.env.MODEL_FILE || modelFilePath,
+  modelFile: process.env.MODEL_FILE || tensorFlowModelFilePath,
   testResultsFile: process.env.TEST_RESULTS_FILE || testResultsFilePath,
   trainResultsFile: process.env.TRAIN_RESULTS_FILE || trainResultsFilePath,
   extractResultsFile: process.env.EXTRACT_RESULTS_FILE || extractResultsFilePath,
+  word2vecFile: process.env.WORD2VEC_FILE || word2vecFilePath,
 
-  // Stack and buffer depth for feature construction
-  stackDepth: parseInt(process.env.STACK_DEPTH, 10) || 2,
-  bufferDepth: parseInt(process.env.BUFFER_DEPTH, 10) || 1,
+  extraction: {
+    // Stack and buffer depth for feature construction
+    stackDepth: parseInt(process.env.STACK_DEPTH, 10) || 2,
+    bufferDepth: parseInt(process.env.BUFFER_DEPTH, 10) || 3,
+    // Word conversion method: word2vec or hash
+    wordConversion: process.env.WORD_CONVERSION || 'hash',
+  },
 
   // Parameters for training TensorFlow
   TensorFlow: {
@@ -110,8 +119,8 @@ const config = {
     optimizer: process.env.TENSORFLOW_OPTIMIZER || 'adam',
     loss: process.env.TENSORFLOW_LOSS || 'categoricalCrossentropy',
     metrics: process.env.TENSORFLOW_METRICS || ['accuracy'],
-    batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 301648,
-    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 50
+    // batchSize: parseInt(process.env.TENSORFLOW_BATCH_SIZE, 10) || 301648,
+    epochs: parseInt(process.env.TENSORFLOW_EPOCHS, 10) || 80
   },
   // Parameters for iterating: main iterate will use these values
   iterate: {

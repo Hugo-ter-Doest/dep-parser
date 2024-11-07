@@ -69,8 +69,20 @@ function test (classifier) {
     averagePrecision: averagePrecision
   }
 
+  const timestamp = new Date();
+  const options = {
+    timeZone: 'Europe/Amsterdam',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  };
+  const localizedTimestamp = timestamp.toLocaleString('nl-NL', options).replace(/:/g, '-').replace(/,/g, '--').replace(/\s+/g, '');
   // Save the results
-  config.testResultsFile = config.outputDir + `testResults-${new Date().toISOString().replace(/:/g, '-')}.json`;
+  config.testResultsFile = config.outputDir + `testResults-${localizedTimestamp}.json`;
   fs.writeFileSync(config.testResultsFile, JSON.stringify(config, null, 2))
   console.log(config.testResults)
   config.testResults = null

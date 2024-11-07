@@ -12,7 +12,8 @@ import config from './Config.js';
 const DEBUG = false
 
 class FeatureExtractor {
-  constructor (corpus) {
+  constructor (corpus, word2vecModel) {
+    this.word2vecModel = word2vecModel
     this.corpus = corpus
   }
 
@@ -21,15 +22,9 @@ class FeatureExtractor {
     let trainingPatterns = []
     let nrSucces = 0
     let nrError = 0
-    let nrNonProjectiveSentences = 0
-    let nrNonProjective = 0
     const failedSentences = []
 
     this.corpus.getSentences().forEach((sentence, index) => {
-        if (sentence.hasNonProjectiveStructure()) {
-          nrNonProjectiveSentences++
-          // return
-        }
         let stack = [];
         let buffer = [...sentence.getTokens()]; // Copy the sentence tokens into buffer
         const sentenceTrainingPatterns = []
@@ -40,12 +35,11 @@ class FeatureExtractor {
         try {
             while (buffer.length > 0 || stack.length > 1) {
                 const trainingPattern = new Pattern()
-                trainingPattern.buildInputVector(stack, buffer, 
-                  this.corpus.formVocab, this.corpus.upostagVocab)
-                const swapIndexes = this.detectSwapIndices(stack, buffer);
-                if (swapIndexes) {
-                  nrNonProjective++
-                }
+                trainingPattern.buildInputVector(stack, buffer, {
+                  formVocab: this.corpus.formVocab,
+                  upostagVocab: this.corpus.upostagVocab,
+                  word2vecModel: this.word2vecModel
+                })
                 // Prioritize leftArc, rightArc, and shift before swap
                 if (stack.length > 1) {
                   const top = stack[stack.length - 1];   // Top of the stack (dependent)
@@ -74,21 +68,17 @@ class FeatureExtractor {
                   }
                   // If none of the above can be applied, check for swap
                   else {
-                      if (swapIndexes) {
-                          const { stackIndex, bufferIndex } = swapIndexes;
-                          action = 'swap' // Label as swap action
-                          this.swap(stackIndex, bufferIndex, stack, buffer);
-                      } else {
-                          // Handle edge case if no valid actions are left
-                          throw new Error('No valid actions available');
-                      }
+                    // Handle edge case if no valid actions are left
+                    // throw new Error('No valid actions available');
+                    action = 'shift'
+                    this.shift(buffer, stack)
                   }
                 } else {
                   // When stack has 1 or fewer elements, prioritize shift
                   action = 'shift'  // Label as shift
                   this.shift(buffer, stack);
                 }
-                DEBUG && ConlluUtil.logState(sentence, stack, buffer, action, swapIndexes, hasDependentsInBuffer)
+                DEBUG && ConlluUtil.logState(sentence, stack, buffer, action, hasDependentsInBuffer)
                 trainingPattern.buildOutputVector(action)
                 sentenceTrainingPatterns.push(trainingPattern)
                 DEBUG && console.log(trainingPattern)
@@ -101,7 +91,7 @@ class FeatureExtractor {
           if (success) {
             nrSucces++
             trainingPatterns = trainingPatterns.concat(sentenceTrainingPatterns)
-            !DEBUG && console.log('Sentence: ' + index)
+            console.log('Sentence: ' + index)
           } else {
             failedSentences.push(index)
             nrError++
@@ -109,13 +99,11 @@ class FeatureExtractor {
           DEBUG && ConlluUtil.logResult(success, sentenceTrainingPatterns)
     });
 
-    DEBUG && console.log('Total number of sentences: ' + this.corpus.getSentences().length)
-    DEBUG && console.log(`Succesfully processed ${nrSucces} sentences, ${nrError} failed.`)
-    DEBUG && console.log('Number of non-projective sentences: ' + nrNonProjectiveSentences)
-    DEBUG && console.log('Number of non-projective constructs detected: ' + nrNonProjective)
-    DEBUG && console.log('Percentage of successful sentences: ' + (nrSucces / this.corpus.getSentences().length * 100).toFixed(2) + '%')  
-    DEBUG && console.log('Number of training patterns: ' + trainingPatterns.length)
-    DEBUG && console.log('Vector size: ' + trainingPatterns[0].input.length)
+    console.log('Total number of sentences: ' + this.corpus.getSentences().length)
+    console.log(`Succesfully processed ${nrSucces} sentences, ${nrError} failed.`)
+    console.log('Percentage of successful sentences: ' + (nrSucces / this.corpus.getSentences().length * 100).toFixed(2) + '%')  
+    console.log('Number of training patterns: ' + trainingPatterns.length)
+    console.log('Vector size: ' + trainingPatterns[0].input.length)
 
     this.corpus.saveSubset(config.failedSentences, failedSentences)
 
@@ -155,15 +143,15 @@ class FeatureExtractor {
   }
 
   // Swap method to swap tokens in the stack and buffer
-    swap(stackIndex, bufferIndex, stack, buffer) {
-        if (stack.length > 1 && buffer.length > 0) {
-            const tmp = stack[stackIndex];  // Temporarily hold the stack element
-            stack[stackIndex] = buffer[bufferIndex];  // Move buffer element to stack
-            buffer[bufferIndex] = tmp;  // Move stack element to buffer
-        } else {
-            throw new Error('Swap operation failed: Stack or buffer does not have enough elements');
-        }
-    }
+  swap(stackIndex, bufferIndex, stack, buffer) {
+      if (stack.length > 1 && buffer.length > 0) {
+          const tmp = stack[stackIndex];  // Temporarily hold the stack element
+          stack[stackIndex] = buffer[bufferIndex];  // Move buffer element to stack
+          buffer[bufferIndex] = tmp;  // Move stack element to buffer
+      } else {
+          throw new Error('Swap operation failed: Stack or buffer does not have enough elements');
+      }
+  }
 
   // Detect which indices in the stack and buffer should be swapped
   detectSwapIndices(stack, buffer) {
