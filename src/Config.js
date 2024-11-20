@@ -108,7 +108,7 @@ const config = {
         activation: process.env.TENSORFLOW_INPUTLAYER_ACTIVATION || 'relu' 
       },
       {
-        units: parseInt(process.env.TENSORFLOW_HIDDENLAYER_UNITS, 10) || 128,
+        units: parseInt(process.env.TENSORFLOW_HIDDENLAYER_UNITS, 10) || 256,
         activation: process.env.TENSORFLOW_HIDDENLAYER_ACTIVATION || 'relu'
       },
       {
@@ -126,7 +126,7 @@ const config = {
   iterate: {
     commands: ['train', 'test'],
     configItem: ['TensorFlow', 'batchSize'],
-    values: [10000, 15000, 20000]
+    values: [1000, 1500, 2000]
   }
 }
 

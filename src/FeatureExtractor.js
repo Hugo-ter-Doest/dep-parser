@@ -25,78 +25,59 @@ class FeatureExtractor {
     const failedSentences = []
 
     this.corpus.getSentences().forEach((sentence, index) => {
-        let stack = [];
-        let buffer = [...sentence.getTokens()]; // Copy the sentence tokens into buffer
-        const sentenceTrainingPatterns = []
-        let action = null
-        const arcs = []
-        let hasDependentsInBuffer = false
+      let stack = [];
+      let buffer = [...sentence.getTokens()]; // Copy the sentence tokens into buffer
+      const sentenceTrainingPatterns = []
+      let action = null
+      const arcs = []
 
-        try {
-            while (buffer.length > 0 || stack.length > 1) {
-                const trainingPattern = new Pattern()
-                trainingPattern.buildInputVector(stack, buffer, {
-                  formVocab: this.corpus.formVocab,
-                  upostagVocab: this.corpus.upostagVocab,
-                  word2vecModel: this.word2vecModel
-                })
-                // Prioritize leftArc, rightArc, and shift before swap
-                if (stack.length > 1) {
-                  const top = stack[stack.length - 1];   // Top of the stack (dependent)
-                  const below = stack[stack.length - 2]; // Below the top (head)
+      try {
+        while (buffer.length > 0 || stack.length > 1) {
+          const trainingPattern = new Pattern()
+          trainingPattern.buildInputVector(stack, buffer, {
+            formVocab: this.corpus.formVocab,
+            upostagVocab: this.corpus.upostagVocab,
+            word2vecModel: this.word2vecModel
+          })
 
-                  // If there are dependents of the top of the stack in the buffer, keep shifting
-                  hasDependentsInBuffer = this.hasDependentsInBuffer(top, buffer);
-                  if (hasDependentsInBuffer) {
-                    action = 'shift'
-                    this.shift(buffer, stack);  // Shift token from buffer to stack
-                  }
-                  // Prioritize leftArc
-                  else if (top.head === below.id) {
-                      action = 'leftArc'  // Label as leftArc
-                      this.leftArc(stack, arcs);  // Perform leftArc
-                  }
-                  // Prioritize rightArc
-                  else if (below.head === top.id) {
-                      action = 'rightArc'  // Label as rightArc
-                      this.rightArc(stack, arcs);  // Perform rightArc
-                  }
-                  // Otherwise, shift from the buffer
-                  else if (buffer.length > 0) {
-                      action = 'shift'  // Label as shift
-                      this.shift(buffer, stack);  // Shift token from buffer to stack
-                  }
-                  // If none of the above can be applied, check for swap
-                  else {
-                    // Handle edge case if no valid actions are left
-                    // throw new Error('No valid actions available');
-                    action = 'shift'
-                    this.shift(buffer, stack)
-                  }
-                } else {
-                  // When stack has 1 or fewer elements, prioritize shift
-                  action = 'shift'  // Label as shift
-                  this.shift(buffer, stack);
-                }
-                DEBUG && ConlluUtil.logState(sentence, stack, buffer, action, hasDependentsInBuffer)
-                trainingPattern.buildOutputVector(action)
-                sentenceTrainingPatterns.push(trainingPattern)
-                DEBUG && console.log(trainingPattern)
+          const top = stack[stack.length - 1]
+          if (top && this.hasDependentsInBuffer(top, buffer)) {
+            action = 'shift'
+            this.shift(buffer, stack)
+          } else if (stack.length > 1) {
+            const below = stack[stack.length - 2]
+            if (top.head === below.id) {
+                action = 'leftArc'
+                arcs.push(this.leftArc(stack))
+            } else if (below.head === top.id) {
+                action = 'rightArc'
+                arcs.push(this.rightArc(stack))
+            } else {
+              action = 'shift'
+              this.shift(buffer, stack)
             }
-          } catch (error) {
-            console.error(`Error while parsing sentence ${index}: ${error.message}`);
-          }
-          const success = ConlluUtil.completelyParsed(stack, buffer)
-          // Only record features and actions for successful sentences
-          if (success) {
-            nrSucces++
-            trainingPatterns = trainingPatterns.concat(sentenceTrainingPatterns)
-            console.log('Sentence: ' + index)
           } else {
-            failedSentences.push(index)
-            nrError++
+            action = 'shift'
+            this.shift(buffer, stack)
           }
-          DEBUG && ConlluUtil.logResult(success, sentenceTrainingPatterns)
+          DEBUG && ConlluUtil.logState(sentence, stack, buffer, action, hasDependentsInBuffer)
+          trainingPattern.buildOutputVector(action)
+          sentenceTrainingPatterns.push(trainingPattern)
+          DEBUG && console.log(trainingPattern)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+      const success = sentence.recallPrecision(arcs)
+      if (success.recall === 1 && success.precision === 1) {
+        nrSucces++
+        trainingPatterns = trainingPatterns.concat(sentenceTrainingPatterns)
+        console.log('Sentence: ' + index)
+      } else {
+        failedSentences.push(index)
+        nrError++
+      }
+      DEBUG && ConlluUtil.logResult(success, sentenceTrainingPatterns)
     });
 
     console.log('Total number of sentences: ' + this.corpus.getSentences().length)
@@ -125,32 +106,37 @@ class FeatureExtractor {
   }
 
   // LeftArc method to attach the top of the stack to the element below it (dependent ← head)
-  leftArc(stack, arcs) {
+  leftArc(stack) {
       if (stack.length > 1) {
           const top = stack.pop();  // Pop top of the stack (dependent)
           const below = stack[stack.length - 1];  // The token below the top (head)
-          arcs.push({ head: below.id, dependent: top.id });  // Create left arc
+          return { head: below.id, dependent: top.id }
       }
   }
 
   // RightArc method to attach the element below the top to the top of the stack (head → dependent)
-  rightArc(stack, arcs) {
+  rightArc(stack) {
       if (stack.length > 1) {
           const top = stack[stack.length - 1];   // Top of the stack (head)
           const below = stack.splice(stack.length - 2, 1)[0];  // Remove below (dependent)
-          arcs.push({ head: top.id, dependent: below.id });  // Create right arc
+          return { head: top.id, dependent: below.id }
       }
   }
 
-  // Swap method to swap tokens in the stack and buffer
-  swap(stackIndex, bufferIndex, stack, buffer) {
-      if (stack.length > 1 && buffer.length > 0) {
-          const tmp = stack[stackIndex];  // Temporarily hold the stack element
-          stack[stackIndex] = buffer[bufferIndex];  // Move buffer element to stack
-          buffer[bufferIndex] = tmp;  // Move stack element to buffer
-      } else {
-          throw new Error('Swap operation failed: Stack or buffer does not have enough elements');
-      }
+  // Swap method to swap tokens in buffer
+  swap(stack, buffer) {
+    if (buffer.length > 1) {
+        const tmp = buffer[0]
+        buffer[0] = buffer[1]
+        buffer[1] = tmp
+    }  
+  }
+
+  nextBufferItemIsRelated(top, buffer) {
+    if (buffer.length > 1 ) {
+      return buffer[1].head === top.id || top.head === buffer[1].id
+    }
+    return false
   }
 
   // Detect which indices in the stack and buffer should be swapped
